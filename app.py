@@ -118,6 +118,12 @@ selection = "Lebanon" if level == "Lebanon" else (town if town != "All towns" el
 
 st.markdown(f"<div class='context'>Current view: <b>{selection}</b> · {len(view_df):,} observations shown · Source: Tourism-Lebanon-2023</div>", unsafe_allow_html=True)
 
+# ---------- values used by charts and summary ----------
+potential_n = int(view_df["Developable Attraction"].sum())
+with_init = int(((view_df["Developable Attraction"] == 1) & (view_df["Recent Initiative"] == 1)).sum())
+without_init = int(((view_df["Developable Attraction"] == 1) & (view_df["Recent Initiative"] == 0)).sum())
+med_hosp = float(view_df["Hospitality Establishments"].median()) if len(view_df) else 0
+
 # ---------- map + two analytical views on one horizontal level ----------
 map_col, chart1, chart2 = st.columns([0.95, 1.05, 1.25], gap="medium")
 
@@ -252,11 +258,6 @@ with chart2:
         st.info("No observations for this selection.")
 
 # ---------- summary metrics ----------
-potential_n = int(view_df["Developable Attraction"].sum())
-with_init = int(((view_df["Developable Attraction"]==1)&(view_df["Recent Initiative"]==1)).sum())
-without_init = int(((view_df["Developable Attraction"]==1)&(view_df["Recent Initiative"]==0)).sum())
-med_hosp = float(view_df["Hospitality Establishments"].median()) if len(view_df) else 0
-
 m1, m2, m3, m4 = st.columns(4)
 m1.metric("Developable attractions", f"{potential_n:,}")
 m2.metric("With initiative", f"{with_init:,}")
